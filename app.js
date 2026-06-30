@@ -218,8 +218,9 @@ function getDefaultSettings(profile) {
     bodyweightKg: p.weightKg || 70,
     scheduleBlocks: getDefaultScheduleBlocks(p),
     workoutSchedule: [1, 3, 5],
-    ...getDefaultSettingsExtras(),
-  };
+          ...getDefaultSettingsExtras(),
+        };
+        migrateNotificationSettings(appData.settings);
 }
 
 // Re-tune the plan when the goal changes (onboarding finish, AI, settings).
@@ -391,6 +392,7 @@ function loadAppData() {
       };
       migrateAllDays(data.days);
       ensureWorkerSettings(data.settings);
+      migrateNotificationSettings(data.settings);
       return data;
     }
     const v2raw = localStorage.getItem(STORAGE_KEY_V2);
@@ -398,6 +400,7 @@ function loadAppData() {
       const data = migrateFromV2(JSON.parse(v2raw));
       migrateAllDays(data.days);
       ensureWorkerSettings(data.settings);
+      migrateNotificationSettings(data.settings);
       return data;
     }
     const v1raw = localStorage.getItem(STORAGE_KEY_V1);
@@ -405,6 +408,7 @@ function loadAppData() {
       const data = migrateFromV1(JSON.parse(v1raw));
       migrateAllDays(data.days);
       ensureWorkerSettings(data.settings);
+      migrateNotificationSettings(data.settings);
       return data;
     }
     return freshAppData();
@@ -430,6 +434,7 @@ function freshAppData() {
 
 function save() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); } catch { /* noop */ }
+  if (typeof syncAllScheduleReminders === 'function') syncAllScheduleReminders();
 }
 
 // ============================================================
@@ -1580,10 +1585,10 @@ function renderSettingsTab() {
         </div>
         <div class="setting-row">
           <div class="setting-row-info">
-            <div class="setting-row-label">Browser notifications</div>
-            <div class="setting-row-sub">Nudge when a water block is due. Works best with the app installed.</div>
+            <div class="setting-row-label">Schedule reminders</div>
+            <div class="setting-row-sub">Get notified for every step in your day — wake, meals, workout, water, and wind-down.</div>
           </div>
-          <button class="btn btn-secondary btn-sm" id="btn-water-notify">${icon('bell', 'icon-sm')} ${s.waterNotifications ? 'On' : 'Enable'}</button>
+          <button class="btn btn-secondary btn-sm" id="btn-schedule-notify">${icon('bell', 'icon-sm')} ${s.scheduleNotifications ? 'On' : 'Enable'}</button>
         </div>
       </div>
     </div>
@@ -1643,9 +1648,9 @@ function renderSettingsTab() {
     if (activeTab === 'today') renderTodayTab();
   });
 
-  document.getElementById('btn-water-notify')?.addEventListener('click', async () => {
-    const ok = await requestWaterNotifications();
-    showToast(ok ? 'Water notifications on.' : 'Notifications blocked.');
+  document.getElementById('btn-schedule-notify')?.addEventListener('click', async () => {
+    const ok = await requestScheduleNotifications();
+    if (!ok) showToast('Notifications blocked — enable them in phone settings.');
     renderSettingsTab();
   });
 
@@ -1792,10 +1797,12 @@ function completeOnboarding(draft) {
   appData.workoutSequence = 0;
   save();
   if (typeof hideOnboarding === 'function') hideOnboarding();
+  document.getElementById('app')?.classList.remove('hidden');
   injectStaticIcons();
   renderHeader();
   showTab('today');
   showToast(`Welcome, ${appData.profile.name}.`);
+  requestScheduleNotifications();
 }
 
 window.completeOnboarding = completeOnboarding;
@@ -1859,7 +1866,7 @@ function init() {
 
     document.getElementById('app')?.classList.remove('hidden');
     injectStaticIcons();
-    if (appData.settings.waterNotifications) startWaterReminderLoop();
+    if (appData.settings.scheduleNotifications) startScheduleReminderLoop();
     renderHeader();
     showTab('today');
   });

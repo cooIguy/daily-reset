@@ -8,6 +8,7 @@ function getDefaultSettingsExtras() {
   return {
     waterRemindersOnSchedule: true,
     waterNotifications: false,
+    scheduleNotifications: false,
     showMealSuggestions: true,
     aiScanEndpoint: DEFAULT_AI_SCAN_ENDPOINT,
     exerciseApiBase: LOCK_IN_WORKER_BASE,
@@ -428,57 +429,6 @@ async function estimateFoodFromText() {
   } finally {
     if (btn) btn.disabled = false;
   }
-}
-
-let waterReminderInterval = null;
-let lastWaterNotificationAt = 0;
-
-function showWaterNotification(body) {
-  const title = 'Lock In — drink water';
-  if (Notification.permission === 'granted') {
-    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-      navigator.serviceWorker.ready.then(reg => reg.showNotification(title, { body, icon: './icons/icon-192.png' }));
-    } else {
-      new Notification(title, { body, icon: './icons/icon-192.png' });
-    }
-  }
-}
-
-function checkWaterReminderNotifications() {
-  if (!appData.settings.waterNotifications) return;
-  if (Notification.permission !== 'granted') return;
-  const day = ensureTodayData();
-  const nowM = new Date().getHours() * 60 + new Date().getMinutes();
-  const blocks = getMergedScheduleBlocks().filter(b => b.type === 'water');
-  for (const b of blocks) {
-    const t = parseTime(b.time);
-    if (nowM >= t && nowM < t + 30 && !day.schedule?.[b.id]) {
-      const key = `water_${b.id}_${todayStr()}`;
-      if (lastWaterNotificationAt === t) continue;
-      if (sessionStorage.getItem(key)) continue;
-      sessionStorage.setItem(key, '1');
-      lastWaterNotificationAt = t;
-      showWaterNotification(`Time for water (${b.time}). Tap + when you drink a glass.`);
-      break;
-    }
-  }
-}
-
-function startWaterReminderLoop() {
-  if (waterReminderInterval) clearInterval(waterReminderInterval);
-  waterReminderInterval = setInterval(checkWaterReminderNotifications, 60000);
-}
-
-async function requestWaterNotifications() {
-  if (!('Notification' in window)) {
-    showToast('Notifications not supported on this browser.');
-    return false;
-  }
-  const perm = await Notification.requestPermission();
-  appData.settings.waterNotifications = perm === 'granted';
-  save();
-  if (perm === 'granted') startWaterReminderLoop();
-  return perm === 'granted';
 }
 
 function injectStaticIcons() {

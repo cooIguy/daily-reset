@@ -1,5 +1,5 @@
 android/android.keystore
-android/app/
+android/app/build/
 android/.gradle/
 android/keystore-password.txt
 node_modules/

@@ -1,12 +1,13 @@
 // Lock In v11 — Service Worker
 
-const CACHE_NAME = 'lock-in-v20';
+const CACHE_NAME = 'lock-in-v21';
 const ASSETS = [
   './index.html',
   './app.css',
   './app.js',
   './exercises.js',
   './nutrition.js',
+  './notifications.js',
   './assistant.js',
   './icons.js',
   './onboarding.css',
@@ -84,6 +85,59 @@ self.addEventListener('notificationclick', event => {
     })
   );
 });
+
+let swSchedule = { enabled: false, blocks: [], completed: {}, date: '' };
+const swNotified = new Set();
+
+function parseTimeMins(time) {
+  const p = String(time || '').split(':');
+  if (p.length < 2) return null;
+  const h = parseInt(p[0], 10);
+  const m = parseInt(p[1], 10);
+  if (Number.isNaN(h) || Number.isNaN(m)) return null;
+  return h * 60 + m;
+}
+
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function checkSwScheduleNotifications() {
+  if (!swSchedule.enabled || !swSchedule.blocks.length) return;
+  const date = todayKey();
+  if (swSchedule.date && swSchedule.date !== date) swNotified.clear();
+  swSchedule.date = date;
+  const nowM = new Date().getHours() * 60 + new Date().getMinutes();
+  for (const b of swSchedule.blocks) {
+    const t = parseTimeMins(b.time);
+    if (t == null || nowM < t || nowM >= t + 20) continue;
+    if (swSchedule.completed?.[b.id]) continue;
+    const key = `${date}_${b.id}`;
+    if (swNotified.has(key)) continue;
+    swNotified.add(key);
+    const action = b.type === 'water' ? 'Drink water' : b.type === 'meal' ? 'Time to eat' : b.type === 'workout' ? 'Workout time' : 'Schedule check-in';
+    self.registration.showNotification('Lock In', {
+      body: `${b.time} — ${action}: ${b.label}`,
+      icon: './icons/icon-192.png',
+      badge: './icons/icon-192.png',
+      tag: `lockin-${b.id}`,
+      renotify: true,
+    });
+    break;
+  }
+}
+
+self.addEventListener('message', event => {
+  const data = event.data;
+  if (!data || data.type !== 'SYNC_SCHEDULE') return;
+  swSchedule.enabled = !!data.enabled;
+  swSchedule.blocks = Array.isArray(data.blocks) ? data.blocks : [];
+  swSchedule.completed = data.completed || {};
+  swSchedule.date = data.date || todayKey();
+});
+
+setInterval(checkSwScheduleNotifications, 60000);
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
