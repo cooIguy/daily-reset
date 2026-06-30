@@ -25,7 +25,7 @@
   "appVersionCode": 1,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
-  "webManifestUrl": "https://cooIguy.github.io/daily-reset/manifest.json",
+  "webManifestUrl": "https://cooiguy.github.io/daily-reset/manifest.json",
   "fallbackType": "customtabs",
   "features": {},
   "alphaDependencies": {
@@ -34,7 +34,7 @@
   "enableSiteSettingsShortcut": true,
   "isChromeOSOnly": false,
   "isMetaQuest": false,
-  "fullScopeUrl": "https://cooIguy.github.io/daily-reset/",
+  "fullScopeUrl": "https://cooiguy.github.io/daily-reset/",
   "minSdkVersion": 21,
   "orientation": "portrait-primary",
   "fingerprints": [],
