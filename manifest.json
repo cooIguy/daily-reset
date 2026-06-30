@@ -4,8 +4,8 @@
   "description": "Daily schedule, nutrition, and beginner calisthenics tracker",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0f0f1a",
-  "theme_color": "#7c3aed",
+  "background_color": "#0C0C0E",
+  "theme_color": "#0C0C0E",
   "orientation": "portrait-primary",
   "icons": [
     {

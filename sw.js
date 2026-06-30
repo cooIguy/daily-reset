@@ -1,6 +1,6 @@
-// Daily Reset v2 — Service Worker (offline + GIF cache)
+// Daily Reset v3 — Service Worker (offline + GIF + Google Fonts cache)
 
-const CACHE_NAME = 'daily-reset-v2';
+const CACHE_NAME = 'daily-reset-v3';
 const ASSETS = [
   './index.html',
   './app.css',
@@ -24,6 +24,8 @@ const CACHEABLE_ORIGINS = [
   'static.exercisedb.dev',
   'cdn.jsdelivr.net',
   'pub-7c14918da31d450e8d6787a3c225c277.r2.dev',
+  'fonts.googleapis.com',
+  'fonts.gstatic.com',
 ];
 
 function isCacheableUrl(url) {

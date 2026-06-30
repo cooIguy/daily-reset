@@ -1254,7 +1254,7 @@ function renderSettingsTab() {
           <button class="btn btn-secondary btn-sm" id="btn-export">Export</button>
         </div>
         <div class="setting-row">
-          <div class="setting-row-info"><div class="setting-row-label" style="color:var(--red)">Reset everything</div></div>
+          <div class="setting-row-info"><div class="setting-row-label" style="color:var(--danger)">Reset everything</div></div>
           <button class="btn btn-danger btn-sm" id="btn-reset">Reset</button>
         </div>
       </div>
