@@ -1,7 +1,7 @@
 {
   "name": "Daily Reset",
   "short_name": "Daily Reset",
-  "description": "Personal habit and beginner fitness tracker",
+  "description": "Daily schedule, nutrition, and beginner calisthenics tracker",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0f0f1a",
