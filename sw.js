@@ -1,6 +1,6 @@
 // Lock In v11 — Service Worker
 
-const CACHE_NAME = 'lock-in-v21';
+const CACHE_NAME = 'lock-in-v22';
 const ASSETS = [
   './index.html',
   './app.css',

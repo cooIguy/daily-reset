@@ -15,21 +15,29 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 /**
  * Standalone WebView shell — never opens Chrome or Custom Tabs.
  */
 public class AppWebViewActivity extends AppCompatActivity {
     private WebView webView;
+    private int lastTopInset = 0;
+    private int lastBottomInset = 0;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.parseColor("#121212"));
-            getWindow().setNavigationBarColor(Color.parseColor("#121212"));
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getWindow().setNavigationBarColor(Color.TRANSPARENT);
         }
 
         requestNotificationPermissionIfNeeded();
@@ -46,9 +54,23 @@ public class AppWebViewActivity extends AppCompatActivity {
         settings.setMediaPlaybackRequiresUserGesture(false);
 
         webView.addJavascriptInterface(new WebAppBridge(this), "LockInAndroid");
-        webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                pushInsetsToWeb(lastTopInset, lastBottomInset);
+            }
+        });
         webView.loadUrl(getString(R.string.launchUrl));
+
+        ViewCompat.setOnApplyWindowInsetsListener(webView, (v, windowInsets) -> {
+            Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            lastTopInset = bars.top;
+            lastBottomInset = bars.bottom;
+            pushInsetsToWeb(bars.top, bars.bottom);
+            return windowInsets;
+        });
+        ViewCompat.requestApplyInsets(webView);
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -60,6 +82,16 @@ public class AppWebViewActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void pushInsetsToWeb(int topPx, int bottomPx) {
+        if (webView == null) return;
+        String js = "(function(){"
+                + "document.documentElement.classList.add('android-app');"
+                + "document.documentElement.style.setProperty('--system-status-inset','" + topPx + "px');"
+                + "document.documentElement.style.setProperty('--system-nav-inset','" + bottomPx + "px');"
+                + "})();";
+        webView.evaluateJavascript(js, null);
     }
 
     private void requestNotificationPermissionIfNeeded() {

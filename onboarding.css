@@ -20,7 +20,7 @@
   flex: 1;
   display: none;
   flex-direction: column;
-  padding: 16px 20px calc(24px + env(safe-area-inset-bottom));
+  padding: calc(16px + var(--top-inset)) 20px calc(24px + var(--bottom-inset));
   overflow-y: auto;
 }
 

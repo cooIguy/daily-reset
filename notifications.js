@@ -126,3 +126,19 @@ document.addEventListener('visibilitychange', () => {
     checkScheduleReminderNotifications();
   }
 });
+
+function applyAndroidSafeAreaFallback() {
+  if (!window.LockInAndroid) return;
+  document.documentElement.classList.add('android-app');
+  const root = document.documentElement;
+  const nav = getComputedStyle(root).getPropertyValue('--system-nav-inset').trim();
+  if (!nav || nav === '0px') {
+    root.style.setProperty('--system-nav-inset', '48px');
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', applyAndroidSafeAreaFallback);
+} else {
+  applyAndroidSafeAreaFallback();
+}
