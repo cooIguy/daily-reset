@@ -1,0 +1,72 @@
+{
+  "pushups": {
+    "catalogId": "Pushups",
+    "searchName": "push-up",
+    "mediaOverride": null
+  },
+  "pike_pushups": {
+    "catalogId": null,
+    "searchName": "pike push",
+    "mediaOverride": "https://pub-7c14918da31d450e8d6787a3c225c277.r2.dev/gifs/720/2921.webp"
+  },
+  "squats": {
+    "catalogId": "Bodyweight_Squat",
+    "searchName": "bodyweight squat",
+    "mediaOverride": null
+  },
+  "glute_bridge": {
+    "catalogId": "Butt_Lift_Bridge",
+    "searchName": "glute bridge",
+    "mediaOverride": null
+  },
+  "plank": {
+    "catalogId": "Plank",
+    "searchName": "plank",
+    "mediaOverride": null
+  },
+  "dead_hang": {
+    "catalogId": null,
+    "searchName": "dead hang",
+    "mediaOverride": null
+  },
+  "scapular_pulls": {
+    "catalogId": "Scapular_Pull-Up",
+    "searchName": "scapular pull",
+    "mediaOverride": null
+  },
+  "negative_pullups": {
+    "catalogId": null,
+    "searchName": "pull-up",
+    "mediaOverride": null
+  },
+  "inverted_rows": {
+    "catalogId": "Inverted_Row",
+    "searchName": "inverted row",
+    "mediaOverride": null
+  },
+  "hollow_hold": {
+    "catalogId": null,
+    "searchName": "hollow",
+    "mediaOverride": null
+  },
+  "mountain_climbers": {
+    "catalogId": "Mountain_Climbers",
+    "searchName": "mountain climber",
+    "mediaOverride": null
+  },
+  "jumping_jacks": {
+    "catalogId": "Jumping_Jacks",
+    "searchName": "jumping jack",
+    "mediaOverride": null
+  },
+  "high_knees": {
+    "catalogId": null,
+    "searchName": "high knee",
+    "mediaOverride": null
+  },
+  "burpees": {
+    "catalogId": "Burpee",
+    "searchName": "burpee",
+    "mediaOverride": null
+  }
+}

@@ -1,20 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Background -->
-  <rect width="512" height="512" rx="96" fill="#1a1a2e"/>
-  <!-- Outer glow ring -->
-  <circle cx="256" cy="256" r="165" fill="none" stroke="#7c3aed" stroke-width="12" opacity="0.4"/>
-  <!-- Main arc (most of the circle) -->
-  <path d="M 256 91 A 165 165 0 1 1 114 338" fill="none" stroke="url(#grad1)" stroke-width="20" stroke-linecap="round"/>
-  <!-- Arrow head on the arc -->
-  <path d="M 86 304 L 114 338 L 150 316" fill="none" stroke="url(#grad1)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Center sun dot -->
-  <circle cx="256" cy="256" r="28" fill="#7c3aed"/>
-  <circle cx="256" cy="256" r="16" fill="#a855f7"/>
-  <!-- Gradient definition -->
-  <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#7c3aed"/>
-      <stop offset="100%" style="stop-color:#06b6d4"/>
-    </linearGradient>
-  </defs>
+  <rect width="512" height="512" rx="96" fill="#0a0f0d"/>
+  <rect x="156" y="228" width="200" height="168" rx="24" fill="none" stroke="#9dfc29" stroke-width="28"/>
+  <path d="M256 120c-44 0-80 36-80 80v28h48v-28c0-18 14-32 32-32s32 14 32 32v28h48v-28c0-44-36-80-80-80z" fill="#9dfc29"/>
+  <circle cx="256" cy="312" r="36" fill="#9dfc29"/>
 </svg>

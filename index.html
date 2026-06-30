@@ -3,74 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0C0C0E" />
-  <meta name="description" content="Daily Reset — daily schedule, nutrition, and beginner calisthenics" />
+  <meta name="theme-color" content="#121212" />
+  <meta name="description" content="Lock In — daily schedule, nutrition, and beginner calisthenics" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Daily Reset" />
+  <meta name="apple-mobile-web-app-title" content="Lock In" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
-  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="app.css" />
+  <link rel="stylesheet" href="onboarding.css" />
 
-  <title>Daily Reset</title>
+  <title>Lock In</title>
 
 </head>
 <body>
 
-<div id="app">
+<div id="onboarding" class="hidden" aria-hidden="true"></div>
+
+<div id="app" class="hidden">
 
   <header class="app-header">
     <div class="header-left">
-      <h1>Daily Reset</h1>
       <div class="date-label" id="header-date">Loading…</div>
     </div>
-    <div class="streak-badge">
-      <span class="streak-flame">🔥</span>
+    <div class="streak-badge" aria-label="Streak">
+      <span class="streak-flame" id="streak-icon"></span>
       <span id="header-streak">0</span>
     </div>
   </header>
 
   <main class="app-main">
 
-    <!-- SCHEDULE TAB -->
     <section class="tab-content" data-tab="today">
 
-      <div class="overview-card">
-        <div class="ring-wrap">
-          <svg class="ring-svg" viewBox="0 0 80 80">
-            <circle class="ring-bg" cx="40" cy="40" r="34" />
-            <circle class="ring-fill" id="ring-fill" cx="40" cy="40" r="34"
-              stroke-dasharray="213.6" stroke-dashoffset="213.6" />
-          </svg>
-          <div class="ring-pct" id="ring-pct">0%</div>
-        </div>
-        <div class="overview-text">
-          <div class="greeting" id="overview-greeting">Good morning.</div>
-          <div class="encouragement" id="overview-enc">One block at a time.</div>
+      <div class="home-hero">
+        <div class="hero-row">
+          <div class="hero-text">
+            <h2 class="hero-greeting" id="overview-greeting">Good morning.</h2>
+            <p class="hero-sub" id="overview-enc">One block at a time.</p>
+            <p class="water-next-hint hidden" id="water-next-hint"></p>
+          </div>
+          <div class="hero-ring">
+            <div class="ring-wrap ring-wrap-hero">
+              <svg class="ring-svg" viewBox="0 0 80 80" style="transform-origin:center">
+                <circle class="ring-bg" cx="40" cy="40" r="34" />
+                <circle class="ring-fill" id="ring-fill" cx="40" cy="40" r="34"
+                  stroke-dasharray="213.6" stroke-dashoffset="213.6" />
+              </svg>
+              <div class="ring-pct" id="ring-pct">0%</div>
+            </div>
+            <div class="hero-ring-label">Today</div>
+          </div>
         </div>
       </div>
 
-      <div class="card nutrition-card">
-        <div class="card-header">
-          <h2><span class="section-icon">🎯</span> Today's targets</h2>
+      <div class="category-row quick-chips" role="navigation" aria-label="Quick sections">
+        <button type="button" class="quick-chip active" data-quick="schedule">
+          <span class="quick-chip-icon" data-icon="clipboard-list"></span>
+          <span class="quick-chip-label">Schedule</span>
+        </button>
+        <button type="button" class="quick-chip" data-quick="workout">
+          <span class="quick-chip-icon" data-icon="dumbbell"></span>
+          <span class="quick-chip-label">Workout</span>
+        </button>
+        <button type="button" class="quick-chip" data-quick="targets">
+          <span class="quick-chip-icon" data-icon="target"></span>
+          <span class="quick-chip-label">Targets</span>
+        </button>
+        <button type="button" class="quick-chip" data-quick="progress">
+          <span class="quick-chip-icon" data-icon="trending-up"></span>
+          <span class="quick-chip-label">Progress</span>
+        </button>
+      </div>
+
+      <div class="panel nutrition-card" id="targets-section">
+        <div class="panel-header">
+          <h3 class="panel-title">Today's Targets</h3>
         </div>
         <div class="nutrition-targets" id="nutrition-targets"></div>
+        <div id="food-log-root"></div>
       </div>
 
-      <div class="section-title">Your schedule</div>
-      <div class="card schedule-card">
-        <div id="schedule-timeline" class="schedule-timeline"></div>
+      <div class="panel schedule-card">
+        <div class="panel-header">
+          <h3 class="panel-title">Your Schedule</h3>
+          <div class="panel-header-actions">
+            <span class="panel-meta" id="schedule-pct">0% done</span>
+            <button type="button" class="panel-add-btn" id="schedule-add-btn" aria-label="Add to your day">+ Add</button>
+          </div>
+        </div>
+        <div id="schedule-timeline" class="schedule-list"></div>
       </div>
 
-      <div class="card">
-        <div class="card-header">
-          <h2><span class="section-icon">💧</span> Water</h2>
+      <div class="challenge-banner" id="challenge-banner">
+        <div class="challenge-text">
+          <span class="challenge-line">Daily</span>
+          <span class="challenge-line">Challenge</span>
+        </div>
+        <div class="challenge-meta" id="challenge-meta">Keep your streak alive</div>
+        <span class="challenge-banner-icon" id="challenge-banner-icon"></span>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h3 class="panel-title">Hydration</h3>
         </div>
         <div class="water-row">
           <div class="water-label-wrap">
@@ -78,42 +120,46 @@
             <div class="water-dots" id="water-dots"></div>
           </div>
           <div class="water-counter">
-            <button class="water-btn" id="water-minus" aria-label="Remove glass">−</button>
+            <button class="water-btn" id="water-minus" aria-label="Remove glass"></button>
             <span class="water-count" id="water-count">0</span>
-            <button class="water-btn" id="water-plus" aria-label="Add glass">+</button>
+            <button class="water-btn" id="water-plus" aria-label="Add glass"></button>
           </div>
         </div>
       </div>
 
-      <div class="section-title">Supplements</div>
-      <div class="card" id="supplements-card"></div>
+      <div class="panel">
+        <div class="panel-header">
+          <h3 class="panel-title">Supplements</h3>
+        </div>
+        <div id="supplements-card"></div>
+      </div>
 
-      <details class="card recomp-details">
-        <summary class="card-header recomp-summary">
-          <h2><span class="section-icon">💡</span> Why this works for skinny-fat</h2>
+      <details class="panel recomp-details">
+        <summary class="panel-header recomp-summary">
+          <h3 class="panel-title">Why this plan works</h3>
+          <span class="recomp-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
         </summary>
         <div class="recomp-body" id="recomp-tips"></div>
       </details>
 
-      <div class="card">
+      <div class="panel">
+        <div class="panel-header">
+          <h3 class="panel-title">Last 7 days</h3>
+        </div>
         <div class="seven-day-section">
-          <div class="seven-day-label">Last 7 Days</div>
           <div class="seven-day-dots" id="seven-day-dots"></div>
         </div>
       </div>
 
     </section>
 
-    <!-- WORKOUT TAB -->
     <section class="tab-content" data-tab="workout">
       <div id="workout-preview"></div>
       <div id="workout-session" class="workout-session"></div>
     </section>
 
-    <!-- PROGRESS TAB -->
     <section class="tab-content" data-tab="progress"></section>
 
-    <!-- SETTINGS TAB -->
     <section class="tab-content" data-tab="settings"></section>
 
   </main>
@@ -127,6 +173,9 @@
       <svg viewBox="0 0 24 24"><path d="M6.5 6.5h11M6.5 17.5h11"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><path d="M6 12h12"/></svg>
       Workout
     </button>
+    <button class="nav-fab" id="ai-fab" type="button" aria-label="Ask AI coach">
+      <svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.8L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.2L12 3z"/><path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14z"/></svg>
+    </button>
     <button class="nav-btn" data-tab="progress" aria-label="Progress">
       <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       Progress
@@ -139,6 +188,13 @@
 
 </div>
 
+<div id="food-modal-root"></div>
+
+<script src="icons.js"></script>
+<script src="exercises.js"></script>
+<script src="nutrition.js"></script>
+<script src="onboarding.js"></script>
+<script src="assistant.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

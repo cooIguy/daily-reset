@@ -1,12 +1,23 @@
-// Daily Reset v3 — Service Worker (offline + GIF + Google Fonts cache)
+// Lock In v11 — Service Worker
 
-const CACHE_NAME = 'daily-reset-v3';
+const CACHE_NAME = 'lock-in-v19';
 const ASSETS = [
   './index.html',
   './app.css',
   './app.js',
+  './exercises.js',
+  './nutrition.js',
+  './assistant.js',
+  './icons.js',
+  './onboarding.css',
+  './onboarding.js',
   './manifest.json',
+  './privacy.html',
+  './data/exercise-catalog.json',
+  './data/program-map.json',
   './icons/icon.svg',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
   './icons/exercises/pushups.svg',
   './icons/exercises/pike_pushups.svg',
   './icons/exercises/squats.svg',
@@ -21,16 +32,27 @@ const ASSETS = [
 ];
 
 const CACHEABLE_ORIGINS = [
-  'static.exercisedb.dev',
+  'raw.githubusercontent.com',
+  'api.workoutxapp.com',
   'cdn.jsdelivr.net',
   'pub-7c14918da31d450e8d6787a3c225c277.r2.dev',
   'fonts.googleapis.com',
   'fonts.gstatic.com',
 ];
 
+function isExerciseGifProxy(url) {
+  try {
+    const u = new URL(url);
+    return /\/exercise-gif\/[^/]+$/.test(u.pathname);
+  } catch {
+    return false;
+  }
+}
+
 function isCacheableUrl(url) {
   try {
     const u = new URL(url);
+    if (isExerciseGifProxy(url)) return true;
     return CACHEABLE_ORIGINS.some(o => u.hostname === o || u.hostname.endsWith('.' + o));
   } catch {
     return false;
@@ -51,6 +73,16 @@ self.addEventListener('activate', event => {
     )
   );
   self.clients.claim();
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      if (list.length) return list[0].focus();
+      return clients.openWindow('./index.html');
+    })
+  );
 });
 
 self.addEventListener('fetch', event => {

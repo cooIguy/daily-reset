@@ -1,9 +1,8 @@
-// Pure Node.js PNG generator — no external packages
+// Lock In — lime on dark PNG icons (no external packages)
 const zlib = require('zlib');
 const fs   = require('fs');
 const path = require('path');
 
-// CRC32 table
 const CRC_TABLE = (() => {
   const t = new Uint32Array(256);
   for (let i = 0; i < 256; i++) {
@@ -30,8 +29,9 @@ function pngChunk(type, data) {
 
 function makePNG(size) {
   const w = size, h = size;
-  // Raw image data: one filter byte (0) + RGBA pixels per row
   const raw = Buffer.alloc(h * (1 + w * 4), 0);
+  const BG = [10, 15, 13];
+  const LIME = [157, 252, 41];
 
   function px(x, y, r, g, b, a = 255) {
     if (x < 0 || x >= w || y < 0 || y >= h) return;
@@ -40,7 +40,7 @@ function makePNG(size) {
   }
 
   const cx = w / 2, cy = h / 2;
-  const rr = size * 0.18; // rounded corner radius
+  const rr = size * 0.2;
 
   function inRR(px, py) {
     const ix = px - cx, iy = py - cy;
@@ -50,64 +50,47 @@ function makePNG(size) {
     return Math.sqrt(ox * ox + oy * oy) <= rr;
   }
 
-  // Background with rounded corners
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
-      if (inRR(x + 0.5, y + 0.5)) px(x, y, 26, 26, 46);
+      if (inRR(x + 0.5, y + 0.5)) px(x, y, ...BG);
     }
   }
 
-  // Arc ring (purple → cyan gradient)
-  const arcR = size * 0.322;
-  const arcThick = size * 0.04;
-  const arcStart = -Math.PI / 2;
-  const arcSpan  = 300 * Math.PI / 180;
-
+  // Lock body (rounded rect)
+  const lw = size * 0.34, lh = size * 0.38;
+  const lt = size * 0.08;
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
-      const dx = x + 0.5 - cx, dy = y + 0.5 - cy;
+      const dx = Math.abs(x + 0.5 - cx);
+      const dy = y + 0.5 - (cy - lh * 0.05);
+      if (dx <= lw / 2 && dy >= -lh / 2 && dy <= lh / 2) {
+        const edgeX = lw / 2 - dx, edgeY = Math.min(dy + lh / 2, lh / 2 - dy);
+        if (edgeX > lt && edgeY > lt) px(x, y, ...LIME);
+        else if (edgeX > 0 && edgeY > 0) {
+          const corner = Math.min(edgeX, edgeY);
+          if (corner <= lt) px(x, y, ...LIME);
+        }
+      }
+    }
+  }
+
+  // Shackle arc
+  const arcR = size * 0.18;
+  const arcW = size * 0.055;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const dx = x + 0.5 - cx;
+      const dy = y + 0.5 - (cy - lh * 0.55);
       const d = Math.sqrt(dx * dx + dy * dy);
-      if (Math.abs(d - arcR) > arcThick) continue;
-
-      let ang = Math.atan2(dy, dx);
-      // Normalize so arcStart is base
-      let rel = ang - arcStart;
-      if (rel < 0) rel += 2 * Math.PI;
-      if (rel > arcSpan) continue;
-
-      const t = rel / arcSpan;
-      // Smooth gradient purple #7c3aed → cyan #06b6d4
-      const r = Math.round(124 + (6   - 124) * t);
-      const g = Math.round(58  + (182 - 58)  * t);
-      const b = Math.round(237 + (212 - 237) * t);
-      // Anti-alias: fade edges of stroke
-      const edge = Math.abs(d - arcR) / arcThick;
-      const alpha = Math.round(255 * Math.max(0, 1 - edge));
-      if (alpha < 20) continue;
-
-      px(x, y, r, g, b, alpha);
+      if (Math.abs(d - arcR) <= arcW && dy <= 0) px(x, y, ...LIME);
     }
   }
 
-  // Center dot
-  const dotR1 = size * 0.056, dotR2 = size * 0.032;
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-      const dx = x + 0.5 - cx, dy = y + 0.5 - cy;
-      const d = Math.sqrt(dx * dx + dy * dy);
-      if (d <= dotR1) px(x, y, 124, 58, 237);
-      if (d <= dotR2) px(x, y, 168, 85, 247);
-    }
-  }
-
-  // Build PNG
   const sig = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(w, 0); ihdr.writeUInt32BE(h, 4);
-  ihdr[8] = 8; ihdr[9] = 6; // 8-bit RGBA
-
+  ihdr[8] = 8; ihdr[9] = 6;
   const compressed = zlib.deflateSync(raw, { level: 6 });
-
   return Buffer.concat([
     sig,
     pngChunk('IHDR', ihdr),
@@ -118,8 +101,6 @@ function makePNG(size) {
 
 const outDir = path.join(__dirname, 'icons');
 for (const size of [192, 512]) {
-  const outFile = path.join(outDir, `icon-${size}.png`);
-  fs.writeFileSync(outFile, makePNG(size));
-  console.log(`✓ icons/icon-${size}.png`);
+  fs.writeFileSync(path.join(outDir, `icon-${size}.png`), makePNG(size));
+  console.log(`icons/icon-${size}.png`);
 }
-console.log('Done.');

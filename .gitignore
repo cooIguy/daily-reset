@@ -1,0 +1,16 @@
+android/android.keystore
+android/app/
+android/.gradle/
+android/keystore-password.txt
+node_modules/
+package/
+*.tgz
+lucide-1.22.0.tgz
+
+# wrangler files
+**/.wrangler/
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example

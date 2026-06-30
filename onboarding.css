@@ -1,0 +1,472 @@
+/* Lock In — onboarding (Vectorfair Gym Fitness kit) */
+
+#onboarding {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #121212;
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+#onboarding.hidden { display: none; }
+
+.ob-screen {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  padding: 16px 20px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+
+.ob-screen.active { display: flex; }
+
+.ob-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+  margin-bottom: 8px;
+}
+
+.ob-back {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: #1E1E1E;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ob-back.hidden { visibility: hidden; }
+
+.ob-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex: 1;
+}
+
+.ob-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #333;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.ob-dot.on {
+  background: #FF7A00;
+  transform: scale(1.15);
+}
+
+.ob-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin: 24px 0 8px;
+  line-height: 1.25;
+}
+
+.ob-sub {
+  font-size: 14px;
+  color: #A3A3A3;
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+
+.ob-hero-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  background: #1E1E1E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.ob-welcome-greeting {
+  font-family: 'Poppins', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.15;
+}
+
+.ob-welcome-greeting .hi { color: #FF7A00; }
+
+.ob-name-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: none;
+  background: #1E1E1E;
+  color: #fff;
+  font-size: 16px;
+  margin-top: 16px;
+}
+
+.ob-name-input:focus {
+  outline: 2px solid rgba(255,122,0,0.5);
+}
+
+.ob-cta {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 100px;
+  background: #FF7A00;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.ob-cta:active { transform: scale(0.98); opacity: 0.9; }
+
+.ob-cta:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.ob-privacy-link {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  color: #737373;
+  text-decoration: underline;
+  margin-top: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.ob-choices {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.ob-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.ob-choice-ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  background: #1E1E1E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.ob-choice.active .ob-choice-ring {
+  border-color: #FF7A00;
+  background: rgba(255,122,0,0.1);
+}
+
+.ob-choice-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #737373;
+}
+
+.ob-choice.active .ob-choice-label { color: #FF7A00; }
+
+.ob-goals {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.ob-goal-card {
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  background: #1E1E1E;
+  text-align: left;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.15s;
+}
+
+.ob-goal-card.active {
+  background: #2A2A2A;
+  outline: 2px solid #FF7A00;
+}
+
+.ob-goal-card strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.ob-goal-card span {
+  font-size: 13px;
+  color: #A3A3A3;
+}
+
+.ob-age-display {
+  font-family: 'Poppins', sans-serif;
+  font-size: 72px;
+  font-weight: 700;
+  color: #FF7A00;
+  text-align: center;
+  margin: 32px 0 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ob-picker-wrap {
+  position: relative;
+  margin: 0 -20px 24px;
+  padding: 0 20px;
+}
+
+.ob-picker-track {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px calc(50% - 28px);
+}
+
+.ob-picker-track::-webkit-scrollbar { display: none; }
+
+.ob-picker-item {
+  flex: 0 0 56px;
+  scroll-snap-align: center;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #737373;
+  padding: 12px 0;
+  transition: color 0.15s, transform 0.15s;
+}
+
+.ob-picker-item.selected {
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.ob-picker-box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 48px;
+  border: 2px solid #FF7A00;
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.ob-unit-toggle {
+  display: flex;
+  background: #1E1E1E;
+  border-radius: 100px;
+  padding: 4px;
+  margin-bottom: 24px;
+  width: fit-content;
+}
+
+.ob-unit-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 100px;
+  background: transparent;
+  color: #737373;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ob-unit-btn.active {
+  background: #FF7A00;
+  color: #fff;
+}
+
+.ob-ruler-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: #FF7A00;
+  text-align: center;
+  margin: 16px 0;
+}
+
+.ob-ruler-unit {
+  font-size: 16px;
+  color: #A3A3A3;
+  margin-left: 4px;
+}
+
+.ob-ruler-wrap {
+  position: relative;
+  height: 80px;
+  margin: 0 -20px 24px;
+  overflow: hidden;
+}
+
+.ob-ruler-track {
+  display: flex;
+  align-items: flex-end;
+  height: 60px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: 0 calc(50% - 8px);
+  -webkit-overflow-scrolling: touch;
+}
+
+.ob-ruler-track::-webkit-scrollbar { display: none; }
+
+.ob-ruler-tick {
+  flex: 0 0 16px;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.ob-ruler-tick .bar {
+  width: 2px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 1px;
+}
+
+.ob-ruler-tick.major .bar {
+  height: 32px;
+  background: rgba(255,255,255,0.45);
+}
+
+.ob-ruler-tick.minor .bar { height: 16px; }
+
+.ob-ruler-tick .num {
+  font-size: 10px;
+  color: #737373;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ob-ruler-indicator {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 48px;
+  border: 2px solid #FF7A00;
+  border-radius: 12px;
+  pointer-events: none;
+  background: rgba(255,122,0,0.08);
+}
+
+.ob-summary {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.ob-summary-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.ob-summary h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.ob-summary p {
+  font-size: 14px;
+  color: #A3A3A3;
+  line-height: 1.6;
+}
+
+.ob-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+}
+
+.ob-modal.open { display: flex; }
+
+.ob-modal-sheet {
+  background: #1E1E1E;
+  border-radius: 16px 16px 0 0;
+  padding: 24px 20px 32px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.ob-modal-sheet h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.ob-modal-sheet p {
+  font-size: 14px;
+  color: #A3A3A3;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.ob-modal-close {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  border: none;
+  border-radius: 100px;
+  background: #2A2A2A;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

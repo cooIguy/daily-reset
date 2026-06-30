@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#121212" />
+  <title>Privacy Policy — Lock In</title>
+  <link rel="stylesheet" href="app.css" />
+  <style>
+    body { max-width: 640px; margin: 0 auto; padding: 24px 20px 48px; }
+    h1 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 8px; }
+    h2 { font-size: 1rem; margin: 24px 0 8px; color: var(--accent); }
+    p, li { font-size: 0.9375rem; color: var(--text-2); line-height: 1.6; }
+    a { color: var(--accent); }
+    .back { display: inline-block; margin-bottom: 24px; font-size: 0.875rem; }
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← Back to Lock In</a>
+  <h1>Privacy Policy</h1>
+  <p>Last updated: June 30, 2026</p>
+
+  <h2>Summary</h2>
+  <p>Lock In stores everything on your device. We do not run servers, accounts, analytics, or ads.</p>
+
+  <h2>What we store on your device</h2>
+  <ul>
+    <li>Profile info you enter during onboarding (name, age, gender, height, weight, goal)</li>
+    <li>Daily schedule check-offs, water intake, food log entries, and workout logs</li>
+    <li>App settings (wake time, workout days, custom labels)</li>
+    <li>AI Coach conversation history (stored locally; cleared when you tap "New chat")</li>
+  </ul>
+  <p>All of this lives in your browser's local storage on your device. Nothing is sent to a Lock In server — the app has none.</p>
+
+  <h2>AI features — what leaves your device</h2>
+  <p>Lock In includes three AI-powered features that send data to a Cloudflare Worker (run by the app developer), which in turn calls the <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener">OpenAI API</a>:</p>
+  <ul>
+    <li><strong>Meal photo scan</strong> — a photo you select is sent to the Worker, then to OpenAI to estimate calories and protein. The photo is not stored beyond the request.</li>
+    <li><strong>Food text estimate</strong> — text you type (e.g. "chicken rice bowl") is sent to the Worker, then to OpenAI for a macro estimate. No personally identifiable information is included.</li>
+    <li><strong>AI Coach</strong> — messages you send, plus summarised context about your goal, schedule, and daily totals, are forwarded to OpenAI. No name, raw biometric data, or photos are included in coach requests. Conversation history is stored locally on your device only.</li>
+  </ul>
+  <p>No URL entry is required. The Worker endpoint is pre-configured in the app. OpenAI processes these requests under their own <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener">privacy policy</a>.</p>
+
+  <h2>Exercise content</h2>
+  <p>Exercise demo GIFs are fetched through the Cloudflare Worker from the <a href="https://workoutxapp.com" target="_blank" rel="noopener">WorkoutX</a> API. Exercise metadata (names, instructions, muscle groups) is bundled locally in the app. No personal data is sent in these requests.</p>
+
+  <h2>What we do not collect</h2>
+  <ul>
+    <li>No account or email required</li>
+    <li>No analytics or tracking pixels</li>
+    <li>No data stored on Lock In servers (the app has none)</li>
+    <li>No sharing with advertisers or third parties</li>
+  </ul>
+
+  <h2>Onboarding data use</h2>
+  <p>Age, height, weight, and gender are used only on your device to estimate calorie and protein targets, and to personalise supplement recommendations. Goal selection shapes your workout schedule and nutrition guidance. A summarised, non-identifiable version of goal and schedule data is sent with AI Coach requests to provide relevant answers.</p>
+
+  <h2>Export and delete</h2>
+  <p>Open Settings → Export data to download a JSON backup of everything. Use Reset everything to wipe all local data instantly.</p>
+
+  <h2>Children</h2>
+  <p>Lock In is intended for users 13 and older. Parents should supervise teens using fitness apps.</p>
+
+  <h2>Changes</h2>
+  <p>We may update this page when the app changes. The "Last updated" date at the top reflects the latest revision. Continued use after an update means you accept the revised policy.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy: open an issue on the app's GitHub repository or contact the developer via the repository's contact page.</p>
+</body>
+</html>

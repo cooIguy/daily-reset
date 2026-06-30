@@ -1,0 +1,10 @@
+name = "lock-in-meal-scan"
+main = "scan-meal.js"
+compatibility_date = "2024-01-01"
+
+[ai]
+binding = "AI"
+
+[vars]
+# Secrets: npx wrangler secret put OPENAI_API_KEY
+#          npx wrangler secret put WORKOUTX_API_KEY
