@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generate Daily Reset Icons</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0f0f1a; color: #f1f5f9; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 24px; margin: 0; }
+    h1 { color: #a78bfa; }
+    p { color: #94a3b8; max-width: 400px; text-align: center; }
+    button { background: #7c3aed; color: white; border: none; padding: 14px 28px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+    button:hover { background: #6d28d9; }
+    .canvases { display: flex; gap: 16px; align-items: flex-end; }
+    canvas { border-radius: 12px; }
+    .label { text-align: center; font-size: 12px; color: #64748b; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Daily Reset — Icon Generator</h1>
+  <p>Click the button below to generate and download the PNG icons. Then place <code>icon-192.png</code> and <code>icon-512.png</code> in the <code>icons/</code> folder of your repo.</p>
+  <div class="canvases">
+    <div><canvas id="c192" width="192" height="192"></canvas><div class="label">icon-192.png</div></div>
+    <div><canvas id="c512" width="512" height="512"></canvas><div class="label">icon-512.png</div></div>
+  </div>
+  <button onclick="generate()">Generate &amp; Download Icons</button>
+
+  <script>
+    function drawIcon(canvas) {
+      const ctx = canvas.getContext('2d');
+      const s = canvas.width;
+      const cx = s / 2, cy = s / 2;
+
+      // Background with rounded corners
+      const r = s * 0.1875; // ~96/512
+      ctx.beginPath();
+      ctx.moveTo(r, 0);
+      ctx.lineTo(s - r, 0);
+      ctx.quadraticCurveTo(s, 0, s, r);
+      ctx.lineTo(s, s - r);
+      ctx.quadraticCurveTo(s, s, s - r, s);
+      ctx.lineTo(r, s);
+      ctx.quadraticCurveTo(0, s, 0, s - r);
+      ctx.lineTo(0, r);
+      ctx.quadraticCurveTo(0, 0, r, 0);
+      ctx.closePath();
+      ctx.fillStyle = '#1a1a2e';
+      ctx.fill();
+
+      const scale = s / 512;
+
+      // Outer glow ring
+      ctx.beginPath();
+      ctx.arc(cx, cy, 165 * scale, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(124, 58, 237, 0.35)';
+      ctx.lineWidth = 12 * scale;
+      ctx.stroke();
+
+      // Main arc gradient
+      const grad = ctx.createLinearGradient(0, 0, s, s);
+      grad.addColorStop(0, '#7c3aed');
+      grad.addColorStop(1, '#06b6d4');
+
+      const arcR = 165 * scale;
+      // Arc from top (256,91) going clockwise, stopping before arrow
+      const startAngle = -Math.PI / 2; // top
+      const endAngle = startAngle + (Math.PI * 2 * 0.82); // ~295 degrees
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, arcR, startAngle, endAngle);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 20 * scale;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Arrow head at end of arc
+      const arrowAngle = endAngle;
+      const ax = cx + arcR * Math.cos(arrowAngle);
+      const ay = cy + arcR * Math.sin(arrowAngle);
+      const tangentAngle = arrowAngle + Math.PI / 2;
+      const arrowSize = 28 * scale;
+      ctx.beginPath();
+      ctx.moveTo(
+        ax - arrowSize * Math.cos(tangentAngle - 0.5),
+        ay - arrowSize * Math.sin(tangentAngle - 0.5)
+      );
+      ctx.lineTo(ax, ay);
+      ctx.lineTo(
+        ax - arrowSize * Math.cos(tangentAngle + 0.5),
+        ay - arrowSize * Math.sin(tangentAngle + 0.5)
+      );
+      ctx.strokeStyle = '#06b6d4';
+      ctx.lineWidth = 20 * scale;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+
+      // Center dot (outer)
+      ctx.beginPath();
+      ctx.arc(cx, cy, 28 * scale, 0, Math.PI * 2);
+      ctx.fillStyle = '#7c3aed';
+      ctx.fill();
+
+      // Center dot (inner highlight)
+      ctx.beginPath();
+      ctx.arc(cx, cy, 16 * scale, 0, Math.PI * 2);
+      ctx.fillStyle = '#a855f7';
+      ctx.fill();
+    }
+
+    function generate() {
+      ['192', '512'].forEach(size => {
+        const canvas = document.getElementById('c' + size);
+        drawIcon(canvas);
+        const link = document.createElement('a');
+        link.download = `icon-${size}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+
+    // Draw previews on load
+    window.onload = () => {
+      drawIcon(document.getElementById('c192'));
+      drawIcon(document.getElementById('c512'));
+    };
+  </script>
+</body>
+</html>
